@@ -19,8 +19,7 @@
             android:value="21cd52290058ceabc0933df3353a298e" />
 
         <activity
-            android:name=".ui.Map4DActivity"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:name=".ui.Map4DActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

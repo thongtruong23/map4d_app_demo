@@ -1,6 +1,7 @@
 package com.truongthong.map4d.viewmodel
 
 import android.accounts.NetworkErrorException
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,7 +31,7 @@ class Map4DViewModel : ViewModel() {
 
     fun getRouteLocation(origin: String, destination: String, mode: String){
         viewModelScope.launch {
-            val response = RetrofitInstance.api.getRoute(API_KEY, origin, destination, mode)
+            val response = RetrofitInstance.api.getRoute(API_KEY, origin, destination, mode, 0)
             try {
                 routeLocation.value = response
             }

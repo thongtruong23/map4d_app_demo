@@ -18,6 +18,7 @@
     <string name="list_saved"><u>Danh sách</u></string>
     <string name="add_list">Thêm danh sách</string>
     <string name="choose">Chọn</string>
+    <string name="done">Xong</string>
     <string name="your_location">Chọn điểm khởi hành</string>
     <string name="destination">Chọn điểm đến</string>
     <string name="map">Map</string>

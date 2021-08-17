@@ -30,7 +30,7 @@ interface Map4DAPI {
         mode: String,
 //        @Query("language")
 //        language:String,
-//        @Query("weighting")
-//        weighting: Int
+        @Query("weighting")
+        weighting: Int
     ):Response<RouteLocation>
 }

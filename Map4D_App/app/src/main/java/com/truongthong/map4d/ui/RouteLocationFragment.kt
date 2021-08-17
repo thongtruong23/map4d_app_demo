@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
 import com.truongthong.map4d.viewmodel.Map4DViewModel
@@ -42,6 +45,10 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
         mapViewModel = ViewModelProvider(this).get(Map4DViewModel::class.java)
 
+        btn_done.visibility = View.INVISIBLE
+
+        btn_start.visibility = View.GONE
+
 //        edt_origin.inputType = 0
 //        edt_destination.inputType = 0
 
@@ -53,14 +60,10 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         val latlong: MFLocationCoordinate = map4D?.cameraPosition!!.target
 
         mfUISeting()
-
-        findRoute()
-
+        findRouteMode()
         drawMarker(latlong)
-
-        buttonChooseVehicle()
-
         setOnMarkerDragListener()
+        processDataLocation()
 
     }
 
@@ -112,22 +115,30 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
             edt_destination.setText("${newLatLng.latitude},${newLatLng.longitude}").toString()
                 .trim()
             btn_choose.visibility = View.INVISIBLE
+            btn_done.visibility = View.VISIBLE
         }
 
     }
 
-    @SuppressLint("ResourceAsColor")
-    private fun findRoute() {
-        btn_start.setOnClickListener {
+    private fun processDataLocation(){
+        btn_done.setOnClickListener {
             mapViewModel.getRouteLocation(
                 edt_origin.text.toString(),
                 edt_destination.text.toString(),
-                "motorcycle"
-            )
+                "motorcycle")
 
-            if (polyline != null)
-                polyline!!.remove()
+            btn_done.visibility = View.INVISIBLE
+            btn_start.visibility = View.VISIBLE
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun findRouteMode() {
+        btn_start.setOnClickListener {
+
             polylineRoute()
+
+            btn_start.visibility = View.GONE
 
             mapViewModel.routeLocation.observe(viewLifecycleOwner, {
                 it.body()?.result?.let {
@@ -141,17 +152,15 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
         }
 
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private fun buttonChooseVehicle() {
-
         cardView_Car.setOnClickListener {
             mapViewModel.getRouteLocation(
                 edt_origin.text.toString(),
                 edt_destination.text.toString(),
                 "car"
             )
+            if (polyline != null)
+                polyline!!.remove()
+            polylineRoute()
 
             mapViewModel.routeLocation.observe(viewLifecycleOwner, {
                 it.body()?.result?.let {
@@ -170,6 +179,9 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
                 edt_destination.text.toString(),
                 "motorcycle"
             )
+            if (polyline != null)
+                polyline!!.remove()
+            polylineRoute()
 
             mapViewModel.routeLocation.observe(viewLifecycleOwner, {
                 it.body()?.result?.let {
@@ -203,6 +215,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
                 }
             })
         }
+
     }
 
     private fun drawMarker(latlong: MFLocationCoordinate) {
@@ -240,16 +253,17 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
+
+            routeLocationList.value = latLngList
+
         })
 
-        routeLocationList.value = latLngList
-
-        polyline = map4D!!.addPolyline(
+        polyline = map4D?.addPolyline(
             MFPolylineOptions().add(*latLngList.toTypedArray())
-                .color(Color.RED)
-                .width(8f)
-                .zIndex(10f)
+                .color(ContextCompat.getColor(context ?: return, R.color.red))
+                .width(8.0f)
         )
+
     }
 
 

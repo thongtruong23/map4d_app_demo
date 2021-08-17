@@ -124,9 +124,9 @@
                                     android:layout_marginStart="1dp"
                                     android:gravity="center"
                                     android:text="Ô tô"
-                                    android:textStyle="bold"
                                     android:textColor="@color/black"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
@@ -157,9 +157,9 @@
                                     android:layout_marginStart="1dp"
                                     android:gravity="center"
                                     android:text="Xe máy"
-                                    android:textStyle="bold"
                                     android:textColor="@color/black"
-                                    android:textSize="14sp" />
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
@@ -189,9 +189,9 @@
                                     android:layout_marginStart="1dp"
                                     android:gravity="center"
                                     android:text="Đi bộ"
-                                    android:textStyle="bold"
                                     android:textColor="@color/black"
-                                    android:textSize="15sp" />
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
 
@@ -275,24 +275,34 @@
         <Button
             android:id="@+id/btn_choose"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
-            android:textColor="@color/white"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/background_start"
-            android:text="@string/choose" />
+            android:text="@string/choose"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/background_button_done"
+            android:text="@string/done"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn_mode"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_gravity="bottom|right"
             android:layout_marginRight="12dp"
             android:layout_marginBottom="80dp"
+            android:background="@drawable/background_button_round"
             android:padding="9dp"
             android:text="2D"
-            android:textColor="@color/white"
-            android:background="@drawable/background_button_round"
-            android:layout_gravity="bottom|right"
-            android:layout_width="43dp"
-            android:layout_height="43dp"/>
+            android:textColor="@color/white" />
 
     </vn.map4d.map.core.MFMapView>
 
