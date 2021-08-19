@@ -65,6 +65,18 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         setOnMarkerDragListener()
         processDataLocation()
 
+        btn_mode_3D.setOnClickListener {
+            map4D?.enable3DMode(true)
+            btn_mode_3D.visibility = View.INVISIBLE
+            btn_mode_2D.visibility = View.VISIBLE
+        }
+
+        btn_mode_2D.setOnClickListener {
+            map4D?.enable3DMode(false)
+            btn_mode_2D.visibility = View.INVISIBLE
+            btn_mode_3D.visibility = View.VISIBLE
+        }
+
     }
 
     private fun setOnMarkerDragListener() {

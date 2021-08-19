@@ -294,7 +294,7 @@
             android:textColor="@color/white" />
 
         <Button
-            android:id="@+id/btn_mode"
+            android:id="@+id/btn_mode_2D"
             android:layout_width="43dp"
             android:layout_height="43dp"
             android:layout_gravity="bottom|right"
@@ -303,6 +303,18 @@
             android:background="@drawable/background_button_round"
             android:padding="9dp"
             android:text="2D"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_mode_3D"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="80dp"
+            android:background="@drawable/background_button_round"
+            android:padding="9dp"
+            android:text="3D"
             android:textColor="@color/white" />
 
     </vn.map4d.map.core.MFMapView>
