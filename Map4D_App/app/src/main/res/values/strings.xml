@@ -22,4 +22,5 @@
     <string name="your_location">Chọn điểm khởi hành</string>
     <string name="destination">Chọn điểm đến</string>
     <string name="map">Map</string>
+    <string name="scan_qr_code">Quét mã địa chỉ</string>
 </resources>

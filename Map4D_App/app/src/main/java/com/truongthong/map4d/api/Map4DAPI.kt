@@ -24,13 +24,11 @@ interface Map4DAPI {
         origin:String,
         @Query("destination")
         destination : String,
-//        @Query("points")
-//        points : String,
         @Query("mode")
         mode: String,
-//        @Query("language")
-//        language:String,
         @Query("weighting")
         weighting: Int
     ):Response<RouteLocation>
+
+
 }
