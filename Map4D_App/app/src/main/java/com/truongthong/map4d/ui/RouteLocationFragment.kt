@@ -1,7 +1,6 @@
 package com.truongthong.map4d.ui
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,14 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
 import com.truongthong.map4d.viewmodel.Map4DViewModel
+import kotlinx.android.synthetic.main.fragment_restaurant.*
 import kotlinx.android.synthetic.main.fragment_route_location.*
+import kotlinx.android.synthetic.main.fragment_route_location.btn_mode_2D
+import kotlinx.android.synthetic.main.fragment_route_location.btn_mode_3D
 import vn.map4d.map.annotations.MFMarker
 import vn.map4d.map.annotations.MFMarkerOptions
 import vn.map4d.map.annotations.MFPolyline
@@ -49,9 +49,6 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
         btn_start.visibility = View.GONE
 
-//        edt_origin.inputType = 0
-//        edt_destination.inputType = 0
-
     }
 
     override fun onMapReady(map: Map4D?) {
@@ -64,7 +61,10 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         drawMarker(latlong)
         setOnMarkerDragListener()
         processDataLocation()
+        modeMap()
+    }
 
+    private fun modeMap() {
         btn_mode_3D.setOnClickListener {
             map4D?.enable3DMode(true)
             btn_mode_3D.visibility = View.INVISIBLE
@@ -76,7 +76,6 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
             btn_mode_2D.visibility = View.INVISIBLE
             btn_mode_3D.visibility = View.VISIBLE
         }
-
     }
 
     private fun setOnMarkerDragListener() {
@@ -132,12 +131,13 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    private fun processDataLocation(){
+    private fun processDataLocation() {
         btn_done.setOnClickListener {
             mapViewModel.getRouteLocation(
                 edt_origin.text.toString(),
                 edt_destination.text.toString(),
-                "motorcycle")
+                "motorcycle"
+            )
 
             btn_done.visibility = View.INVISIBLE
             btn_start.visibility = View.VISIBLE
@@ -277,7 +277,6 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         )
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

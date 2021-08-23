@@ -1,26 +1,16 @@
 package com.truongthong.map4d.ui
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialFadeThrough
@@ -29,6 +19,10 @@ import com.truongthong.map4d.adapter.MapSearchAdapter
 import com.truongthong.map4d.model.search.MapLocation
 import com.truongthong.map4d.viewmodel.Map4DViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.btn_mode_2D
+import kotlinx.android.synthetic.main.fragment_home.btn_mode_3D
+import kotlinx.android.synthetic.main.fragment_home.btn_route
+import kotlinx.android.synthetic.main.fragment_restaurant.*
 import vn.map4d.map.annotations.MFMarkerOptions
 import vn.map4d.map.camera.MFCameraUpdateFactory
 import vn.map4d.map.core.Map4D
@@ -56,9 +50,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
 
         clickRouteListener()
 
+        clickButtonNearbyPlace()
+
         mapViewModel = ViewModelProvider(this).get(Map4DViewModel::class.java)
 
-        mapViewModel.searchLocation.observe(viewLifecycleOwner, Observer { reponse ->
+        mapViewModel.searchLocation.observe(viewLifecycleOwner, { reponse ->
             if (reponse.isSuccessful) {
                 reponse.body()?.let { locationRespone ->
                     mapAdapter.setLocationData(locationRespone.result)
@@ -80,10 +76,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
                 map4D?.uiSettings?.isMyLocationButtonEnabled = false
                 rv_listSuggest.visibility = View.VISIBLE
 
-                if (query.toString().trim().isNotBlank() && query!=null){
+                if (query.toString().trim().isNotBlank() && query != null) {
                     mapViewModel.getSearchLocation(query)
                     mapAdapter.filter.filter(query)
-                }else{
+                } else {
 //                    Toast.makeText(requireContext(),"is Null", Toast.LENGTH_SHORT).show()
                     rv_listSuggest.visibility = View.INVISIBLE
                     btn_route.visibility = View.VISIBLE
@@ -107,6 +103,54 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
         }
     }
 
+    private fun clickButtonNearbyPlace() {
+        btn_restaurant.setOnClickListener {
+            val restaurantFragment: Fragment = RestaurantFragment()
+            val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
+
+            transaction.replace(R.id.frameLayout, restaurantFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
+        btn_atm.setOnClickListener {
+            val atmFragment: Fragment = ATMFragment()
+            val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
+
+            transaction.replace(R.id.frameLayout, atmFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
+        btn_cafe.setOnClickListener {
+            val coffeeFragment: Fragment = CoffeeFragment()
+            val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
+
+            transaction.replace(R.id.frameLayout, coffeeFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
+        btn_parking.setOnClickListener {
+            val parkingFragment: Fragment = ParkingFragment()
+            val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
+
+            transaction.replace(R.id.frameLayout, parkingFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
+        btn_school.setOnClickListener {
+            val schoolFragment: Fragment = SchoolFragment()
+            val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
+
+            transaction.replace(R.id.frameLayout, schoolFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+        }
+    }
+
     private fun setupRecyclerView() {
         mapAdapter = MapSearchAdapter(arrayListOf(), this)
         rv_listSuggest.apply {
@@ -121,6 +165,22 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
         getCurrentLocation()
         mfUISeting()
 
+        modeMap()
+
+    }
+
+    private fun modeMap() {
+        btn_mode_3D.setOnClickListener {
+            map4D?.enable3DMode(true)
+            btn_mode_3D.visibility = View.INVISIBLE
+            btn_mode_2D.visibility = View.VISIBLE
+        }
+
+        btn_mode_2D.setOnClickListener {
+            map4D?.enable3DMode(false)
+            btn_mode_2D.visibility = View.INVISIBLE
+            btn_mode_3D.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreateView(
@@ -135,7 +195,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
     }
 
     fun getCurrentLocation() {
-        var location : MFLocationCoordinate = map4D?.cameraPosition!!.target
+        val location: MFLocationCoordinate = map4D?.cameraPosition!!.target
         map4D?.addMarker(
             MFMarkerOptions().position(location).title("83 Phan Thanh")
                 .snippet("Phường Phước Ninh, Quận Hải Châu, Thành Phố Đà Nẵng")

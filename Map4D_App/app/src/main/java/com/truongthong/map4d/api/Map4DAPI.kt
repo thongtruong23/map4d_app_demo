@@ -1,5 +1,6 @@
 package com.truongthong.map4d.api
 
+import com.truongthong.map4d.model.nearby.NeabyPoint
 import com.truongthong.map4d.model.route.RouteLocation
 import com.truongthong.map4d.model.search.MapResponse
 import com.truongthong.map4d.util.Constants.Companion.API_KEY
@@ -30,5 +31,16 @@ interface Map4DAPI {
         weighting: Int
     ):Response<RouteLocation>
 
+    @GET("place/nearby-search")
+    suspend fun getNearby(
+        @Query("key")
+        key: String,
+        @Query("location")
+        location: String,
+        @Query("radius")
+        radius: Int,
+        @Query("text")
+        text: String
+    ): Response<NeabyPoint>
 
 }
