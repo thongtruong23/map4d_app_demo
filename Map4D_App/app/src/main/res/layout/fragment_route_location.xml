@@ -267,6 +267,16 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/txt_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    android:text="Kéo thả Marker để chọn vị trí"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
 
             </LinearLayout>
 

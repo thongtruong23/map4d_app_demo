@@ -2,6 +2,7 @@ package com.truongthong.map4d.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,12 +18,12 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
 import com.truongthong.map4d.adapter.MapSearchAdapter
 import com.truongthong.map4d.model.search.MapLocation
+import com.truongthong.map4d.util.Constants.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.truongthong.map4d.viewmodel.Map4DViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.btn_mode_2D
 import kotlinx.android.synthetic.main.fragment_home.btn_mode_3D
 import kotlinx.android.synthetic.main.fragment_home.btn_route
-import kotlinx.android.synthetic.main.fragment_restaurant.*
 import vn.map4d.map.annotations.MFMarkerOptions
 import vn.map4d.map.camera.MFCameraUpdateFactory
 import vn.map4d.map.core.Map4D
@@ -33,6 +34,7 @@ import vn.map4d.types.MFLocationCoordinate
 class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemClickListener {
 
     private var map4D: Map4D? = null
+    private var locationPermissionGranted = false
     private var mapAdapter = MapSearchAdapter(arrayListOf(), this)
     private lateinit var mapViewModel: Map4DViewModel
 
@@ -42,7 +44,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
         mapView.onCreate(savedInstanceState)
         mapView.onResume()
 
-        permissionMap()
+        myLocationEnable()
 
         mapView.getMapAsync(this)
 
@@ -72,6 +74,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
 
             override fun onQueryTextChange(query: String?): Boolean {
                 btn_route.visibility = View.INVISIBLE
+                btn_mode_2D.visibility = View.INVISIBLE
+                btn_mode_3D.visibility = View.INVISIBLE
                 btn_add_location.visibility = View.INVISIBLE
                 map4D?.uiSettings?.isMyLocationButtonEnabled = false
                 rv_listSuggest.visibility = View.VISIBLE
@@ -80,7 +84,6 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
                     mapViewModel.getSearchLocation(query)
                     mapAdapter.filter.filter(query)
                 } else {
-//                    Toast.makeText(requireContext(),"is Null", Toast.LENGTH_SHORT).show()
                     rv_listSuggest.visibility = View.INVISIBLE
                     btn_route.visibility = View.VISIBLE
                     btn_add_location.visibility = View.VISIBLE
@@ -162,8 +165,10 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
 
     override fun onMapReady(map: Map4D?) {
         map4D = map
-        getCurrentLocation()
-        mfUISeting()
+
+        map4D?.uiSettings?.isMyLocationButtonEnabled = true
+
+        updateUIMap()
 
         modeMap()
 
@@ -194,37 +199,51 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
         return view
     }
 
-    fun getCurrentLocation() {
-        val location: MFLocationCoordinate = map4D?.cameraPosition!!.target
-        map4D?.addMarker(
-            MFMarkerOptions().position(location).title("83 Phan Thanh")
-                .snippet("Phường Phước Ninh, Quận Hải Châu, Thành Phố Đà Nẵng")
-        )
-        map4D?.moveCamera(MFCameraUpdateFactory.newCoordinate(location))
-    }
-
-    //cap quyen su dung
-    fun permissionMap() {
-        if (ContextCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ), 100
-            )
+    private fun myLocationEnable(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            if (ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED){
+                locationPermissionGranted = true
+            }else{
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE)
+            }
         }
-
     }
 
-    fun mfUISeting() {
-        map4D?.uiSettings?.isMyLocationButtonEnabled = true
-        map4D?.uiSettings?.isRotateGesturesEnabled = true
-        map4D?.uiSettings?.setAllGesturesEnabled(true)
-        map4D?.setTiltGesturesEnabled(true)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        locationPermissionGranted = false
+        when(requestCode){
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    locationPermissionGranted = true
+                }else{
+                    locationPermissionGranted = false
+                    myLocationEnable()
+                }
+            }
+        }
+        updateUIMap()
+    }
 
+    private fun updateUIMap() {
+        try {
+            if (locationPermissionGranted){
+                map4D?.isMyLocationEnabled = true
+                map4D?.uiSettings?.isMyLocationButtonEnabled = true
+
+            }else{
+                map4D?.isMyLocationEnabled = false
+                map4D?.uiSettings?.isMyLocationButtonEnabled = false
+            }
+        }catch (e : SecurityException){
+            println(e.message)
+        }
     }
 
     //xu ly su kien khi click vao item recyclerview
@@ -245,6 +264,8 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
         rv_listSuggest.visibility = View.INVISIBLE
         btn_route.visibility = View.VISIBLE
         btn_add_location.visibility = View.VISIBLE
+        btn_mode_2D.visibility = View.VISIBLE
+        btn_mode_3D.visibility = View.VISIBLE
         map4D?.uiSettings?.isMyLocationButtonEnabled = true
 
     }

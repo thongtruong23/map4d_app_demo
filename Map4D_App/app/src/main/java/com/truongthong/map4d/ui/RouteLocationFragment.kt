@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
 import com.truongthong.map4d.viewmodel.Map4DViewModel
-import kotlinx.android.synthetic.main.fragment_restaurant.*
 import kotlinx.android.synthetic.main.fragment_route_location.*
 import kotlinx.android.synthetic.main.fragment_route_location.btn_mode_2D
 import kotlinx.android.synthetic.main.fragment_route_location.btn_mode_3D
@@ -56,7 +55,6 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
         val latlong: MFLocationCoordinate = map4D?.cameraPosition!!.target
 
-        mfUISeting()
         findRouteMode()
         drawMarker(latlong)
         setOnMarkerDragListener()
@@ -82,6 +80,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         map4D?.setOnMarkerDragListener(object : Map4D.OnMarkerDragListener {
             override fun onMarkerDrag(p0: MFMarker?) {
                 btn_choose.visibility = View.VISIBLE
+                txt_notice.visibility = View.GONE
                 if (polyline != null) {
                     polyline!!.remove()
                 }
@@ -289,14 +288,5 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
         return view
     }
-
-    private fun mfUISeting() {
-        map4D?.uiSettings?.isMyLocationButtonEnabled = true
-        map4D?.uiSettings?.isRotateGesturesEnabled = true
-        map4D?.uiSettings?.setAllGesturesEnabled(true)
-        map4D?.setTiltGesturesEnabled(true)
-
-    }
-
 
 }
