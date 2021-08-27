@@ -168,6 +168,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
 
         map4D?.uiSettings?.isMyLocationButtonEnabled = true
 
+        btn_mode_2D.visibility = View.VISIBLE
+        btn_mode_3D.visibility = View.VISIBLE
+
         updateUIMap()
 
         modeMap()

@@ -136,7 +136,6 @@ class RestaurantFragment : Fragment(), OnMapReadyCallback,
         map4D?.animateCamera(MFCameraUpdateFactory.newCoordinate(mLocation))
 
         rv_listNearby.visibility = View.INVISIBLE
-        map4D?.uiSettings?.isMyLocationButtonEnabled = true
 
     }
 
