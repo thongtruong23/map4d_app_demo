@@ -19,7 +19,7 @@ import com.truongthong.map4d.R
 import com.truongthong.map4d.adapter.MapSearchAdapter
 import com.truongthong.map4d.model.search.MapLocation
 import com.truongthong.map4d.util.Constants.Companion.LOCATION_PERMISSION_REQUEST_CODE
-import com.truongthong.map4d.viewmodel.Map4DViewModel
+import com.truongthong.map4d.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.btn_mode_2D
 import kotlinx.android.synthetic.main.fragment_home.btn_mode_3D
@@ -36,7 +36,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
     private var map4D: Map4D? = null
     private var locationPermissionGranted = false
     private var mapAdapter = MapSearchAdapter(arrayListOf(), this)
-    private lateinit var mapViewModel: Map4DViewModel
+    private lateinit var mapViewModel: MainViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -54,7 +54,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
 
         clickButtonNearbyPlace()
 
-        mapViewModel = ViewModelProvider(this).get(Map4DViewModel::class.java)
+        mapViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         mapViewModel.searchLocation.observe(viewLifecycleOwner, { reponse ->
             if (reponse.isSuccessful) {

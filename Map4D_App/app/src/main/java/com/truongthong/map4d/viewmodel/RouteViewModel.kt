@@ -14,22 +14,9 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 
-class Map4DViewModel : ViewModel() {
+class RouteViewModel : ViewModel() {
 
-    val searchLocation: MutableLiveData<Response<MapResponse>> = MutableLiveData()
     val routeLocation: MutableLiveData<Response<RouteLocation>> = MutableLiveData()
-    val getNearby: MutableLiveData<Response<NeabyPoint>> = MutableLiveData()
-
-    fun getSearchLocation(searchQuery: String) {
-        viewModelScope.launch {
-            val response = RetrofitInstance.api.searchLocation(searchQuery, API_KEY)
-            try {
-                searchLocation.value = response
-            } catch (e: NetworkErrorException) {
-
-            }
-        }
-    }
 
     fun getRouteLocation(origin: String, destination: String, mode: String) {
         viewModelScope.launch {
@@ -41,17 +28,6 @@ class Map4DViewModel : ViewModel() {
             }
         }
 
-    }
-
-    fun getNearby(location: String, radius: Int, text: String) {
-        viewModelScope.launch {
-            val response = RetrofitInstance.api.getNearby(API_KEY, location, radius, text)
-            try {
-                getNearby.value = response
-            } catch (e: NetworkErrorException) {
-
-            }
-        }
     }
 
 }

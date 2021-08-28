@@ -10,11 +10,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
-import com.truongthong.map4d.adapter.ATMAdapter
 import com.truongthong.map4d.adapter.ParkingAdapter
 import com.truongthong.map4d.model.nearby.ResultNearby
-import com.truongthong.map4d.viewmodel.Map4DViewModel
-import kotlinx.android.synthetic.main.fragment_home.*
+import com.truongthong.map4d.viewmodel.MainViewModel
+import com.truongthong.map4d.viewmodel.NearbyPlaceViewModel
 import kotlinx.android.synthetic.main.fragment_restaurant.*
 import kotlinx.android.synthetic.main.fragment_restaurant.btn_mode_2D
 import kotlinx.android.synthetic.main.fragment_restaurant.btn_mode_3D
@@ -30,7 +29,7 @@ class ParkingFragment : Fragment(), OnMapReadyCallback,
 
     private var map4D: Map4D? = null
     private var nearbyAdapter = ParkingAdapter(arrayListOf(), this)
-    private lateinit var mapViewModel: Map4DViewModel
+    private lateinit var nearbyPlaceViewModel: NearbyPlaceViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -44,11 +43,11 @@ class ParkingFragment : Fragment(), OnMapReadyCallback,
 
         setupRecyclerView()
 
-        mapViewModel = ViewModelProvider(this).get(Map4DViewModel::class.java)
+        nearbyPlaceViewModel = ViewModelProvider(this).get(NearbyPlaceViewModel::class.java)
 
-        mapViewModel.getNearby("16.0721,108.2243", 8000, "bai do xe")
+        nearbyPlaceViewModel.getNearby("16.0721,108.2243", 8000, "bai do xe")
 
-        mapViewModel.getNearby.observe(viewLifecycleOwner, { reponse ->
+        nearbyPlaceViewModel.getNearby.observe(viewLifecycleOwner, { reponse ->
             if (reponse.isSuccessful) {
                 reponse.body()?.let { locationRespone ->
                     nearbyAdapter.setLocationData(locationRespone.result)
@@ -69,7 +68,7 @@ class ParkingFragment : Fragment(), OnMapReadyCallback,
                 rv_listNearby.visibility = View.VISIBLE
 
                 if (query.toString().trim().isNotBlank() && query != null) {
-                    mapViewModel.getNearby("16.0721,108.2243", 8000, query)
+                    nearbyPlaceViewModel.getNearby("16.0721,108.2243", 8000, query)
                 } else {
                     rv_listNearby.visibility = View.INVISIBLE
                     mapViewRestaurant.visibility = View.INVISIBLE

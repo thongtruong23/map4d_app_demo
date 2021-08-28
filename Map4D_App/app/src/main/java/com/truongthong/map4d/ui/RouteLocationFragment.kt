@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
-import com.truongthong.map4d.viewmodel.Map4DViewModel
+import com.truongthong.map4d.viewmodel.RouteViewModel
 import kotlinx.android.synthetic.main.fragment_route_location.*
 import kotlinx.android.synthetic.main.fragment_route_location.btn_mode_2D
 import kotlinx.android.synthetic.main.fragment_route_location.btn_mode_3D
@@ -30,7 +30,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
     private var currentMarker: MFMarker? = null
     private var map4D: Map4D? = null
-    private lateinit var mapViewModel: Map4DViewModel
+    private lateinit var routeViewModel : RouteViewModel
     private var polyline: MFPolyline? = null
     private var routeLocationList = MutableLiveData<MutableList<MFLocationCoordinate>>()
 
@@ -42,7 +42,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
         mapViewRoute.getMapAsync(this)
 
-        mapViewModel = ViewModelProvider(this).get(Map4DViewModel::class.java)
+        routeViewModel = ViewModelProvider(this).get(RouteViewModel::class.java)
 
         btn_done.visibility = View.INVISIBLE
 
@@ -132,7 +132,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
     private fun processDataLocation() {
         btn_done.setOnClickListener {
-            mapViewModel.getRouteLocation(
+            routeViewModel.getRouteLocation(
                 edt_origin.text.toString(),
                 edt_destination.text.toString(),
                 "motorcycle"
@@ -151,7 +151,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
 
             btn_start.visibility = View.GONE
 
-            mapViewModel.routeLocation.observe(viewLifecycleOwner, {
+            routeViewModel.routeLocation.observe(viewLifecycleOwner, {
                 it.body()?.result?.let {
                     txt_distance.text = it.routes[0].distance.text
                     txt_duration.text = it.routes[0].duration.text
@@ -164,7 +164,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         }
 
         cardView_Car.setOnClickListener {
-            mapViewModel.getRouteLocation(
+            routeViewModel.getRouteLocation(
                 edt_origin.text.toString(),
                 edt_destination.text.toString(),
                 "car"
@@ -173,7 +173,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
                 polyline!!.remove()
             polylineRoute()
 
-            mapViewModel.routeLocation.observe(viewLifecycleOwner, {
+            routeViewModel.routeLocation.observe(viewLifecycleOwner, {
                 it.body()?.result?.let {
                     txt_distance.text = it.routes[0].distance.text
                     txt_duration.text = it.routes[0].duration.text
@@ -185,7 +185,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         }
 
         cardView_Motor.setOnClickListener {
-            mapViewModel.getRouteLocation(
+            routeViewModel.getRouteLocation(
                 edt_origin.text.toString(),
                 edt_destination.text.toString(),
                 "motorcycle"
@@ -194,7 +194,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
                 polyline!!.remove()
             polylineRoute()
 
-            mapViewModel.routeLocation.observe(viewLifecycleOwner, {
+            routeViewModel.routeLocation.observe(viewLifecycleOwner, {
                 it.body()?.result?.let {
                     txt_distance.text = it.routes[0].distance.text
                     txt_duration.text = it.routes[0].duration.text
@@ -207,7 +207,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
         }
 
         cardView_Walk.setOnClickListener {
-            mapViewModel.getRouteLocation(
+            routeViewModel.getRouteLocation(
                 edt_origin.text.toString(),
                 edt_destination.text.toString(),
                 "foot"
@@ -216,7 +216,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
                 polyline!!.remove()
             polylineRoute()
 
-            mapViewModel.routeLocation.observe(viewLifecycleOwner, {
+            routeViewModel.routeLocation.observe(viewLifecycleOwner, {
                 it.body()?.result?.let {
                     txt_distance.text = it.routes[0].distance.text
                     txt_duration.text = it.routes[0].duration.text
@@ -250,7 +250,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
     private fun polylineRoute() {
         val latLngList = mutableListOf<MFLocationCoordinate>()
 
-        mapViewModel.routeLocation.observe(viewLifecycleOwner, {
+        routeViewModel.routeLocation.observe(viewLifecycleOwner, {
             it.body()?.result?.routes?.forEach {
                 it.legs.forEach {
                     it.steps.forEach {
