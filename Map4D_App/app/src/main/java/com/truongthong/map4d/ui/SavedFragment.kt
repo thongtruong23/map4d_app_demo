@@ -9,11 +9,6 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
 
 class SavedFragment : Fragment() {
-
-    companion object{
-        fun newInstance() = SavedFragment()
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

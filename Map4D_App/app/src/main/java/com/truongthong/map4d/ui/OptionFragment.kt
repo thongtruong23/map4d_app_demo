@@ -9,12 +9,6 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
 
 class OptionFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = OptionFragment()
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

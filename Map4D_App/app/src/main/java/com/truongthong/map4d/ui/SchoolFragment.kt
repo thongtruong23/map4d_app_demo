@@ -12,7 +12,6 @@ import com.google.android.material.transition.MaterialFadeThrough
 import com.truongthong.map4d.R
 import com.truongthong.map4d.adapter.SchoolAdapter
 import com.truongthong.map4d.model.nearby.ResultNearby
-import com.truongthong.map4d.viewmodel.MainViewModel
 import com.truongthong.map4d.viewmodel.NearbyPlaceViewModel
 import kotlinx.android.synthetic.main.fragment_restaurant.*
 import kotlinx.android.synthetic.main.fragment_restaurant.btn_mode_2D
