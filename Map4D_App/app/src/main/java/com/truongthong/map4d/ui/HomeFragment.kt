@@ -116,6 +116,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
             transaction.commit()
 
         }
+
         btn_atm.setOnClickListener {
             val atmFragment: Fragment = ATMFragment()
             val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
@@ -125,6 +126,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
             transaction.commit()
 
         }
+
         btn_cafe.setOnClickListener {
             val coffeeFragment: Fragment = CoffeeFragment()
             val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
@@ -134,6 +136,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
             transaction.commit()
 
         }
+
         btn_parking.setOnClickListener {
             val parkingFragment: Fragment = ParkingFragment()
             val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
@@ -143,6 +146,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
             transaction.commit()
 
         }
+
         btn_school.setOnClickListener {
             val schoolFragment: Fragment = SchoolFragment()
             val transaction: FragmentTransaction = fragmentManager?.beginTransaction()!!
@@ -202,14 +206,20 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
         return view
     }
 
-    private fun myLocationEnable(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            if (ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED){
+    private fun myLocationEnable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    this.requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+                == PackageManager.PERMISSION_GRANTED
+            ) {
                 locationPermissionGranted = true
-            }else{
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE)
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
             }
         }
     }
@@ -221,11 +231,11 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         locationPermissionGranted = false
-        when(requestCode){
+        when (requestCode) {
             LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermissionGranted = true
-                }else{
+                } else {
                     locationPermissionGranted = false
                     myLocationEnable()
                 }
@@ -236,15 +246,15 @@ class HomeFragment : Fragment(), OnMapReadyCallback, MapSearchAdapter.OnMapItemC
 
     private fun updateUIMap() {
         try {
-            if (locationPermissionGranted){
+            if (locationPermissionGranted) {
                 map4D?.isMyLocationEnabled = true
                 map4D?.uiSettings?.isMyLocationButtonEnabled = true
 
-            }else{
+            } else {
                 map4D?.isMyLocationEnabled = false
                 map4D?.uiSettings?.isMyLocationButtonEnabled = false
             }
-        }catch (e : SecurityException){
+        } catch (e: SecurityException) {
             println(e.message)
         }
     }

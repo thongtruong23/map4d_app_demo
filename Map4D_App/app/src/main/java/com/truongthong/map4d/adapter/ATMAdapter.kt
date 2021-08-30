@@ -12,7 +12,7 @@ import com.truongthong.map4d.model.nearby.ResultNearby
 import com.truongthong.map4d.ui.ATMFragment
 
 class ATMAdapter(
-    var restaurantList: MutableList<ResultNearby>,
+    var atmList: MutableList<ResultNearby>,
     var clickListener: ATMFragment
 ) :
     RecyclerView.Adapter<ATMAdapter.ViewHolder>() {
@@ -48,23 +48,23 @@ class ATMAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.initialaze(restaurantList.get(position), clickListener)
+        holder.initialaze(atmList.get(position), clickListener)
 
     }
 
     override fun getItemCount(): Int {
-        return restaurantList.size
+        return atmList.size
     }
 
     fun setLocationData(nearbyLocation: MutableList<ResultNearby>?) {
-        restaurantList = nearbyLocation!!
+        atmList = nearbyLocation!!
         notifyDataSetChanged()
     }
 
 
     //interface xu ly su kien onclick item
     interface OnMapItemClickListener {
-        fun onItemClick(restaurantList: ResultNearby, position: Int)
+        fun onItemClick(atmList: ResultNearby, position: Int)
     }
 
 //    private val onItemClickListener: ((MapLocation) -> Unit)? = null

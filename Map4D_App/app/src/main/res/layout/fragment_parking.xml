@@ -7,7 +7,7 @@
     tools:context=".ui.RestaurantFragment">
 
     <vn.map4d.map.core.MFMapView
-        android:id="@+id/mapViewRestaurant"
+        android:id="@+id/mapViewParking"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button

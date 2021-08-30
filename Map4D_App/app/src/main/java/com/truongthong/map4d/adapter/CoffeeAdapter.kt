@@ -12,7 +12,7 @@ import com.truongthong.map4d.model.nearby.ResultNearby
 import com.truongthong.map4d.ui.CoffeeFragment
 
 class CoffeeAdapter(
-    var restaurantList: MutableList<ResultNearby>,
+    var coffeeList: MutableList<ResultNearby>,
     var clickListener: CoffeeFragment
 ) :
     RecyclerView.Adapter<CoffeeAdapter.ViewHolder>() {
@@ -48,23 +48,23 @@ class CoffeeAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.initialaze(restaurantList.get(position), clickListener)
+        holder.initialaze(coffeeList.get(position), clickListener)
 
     }
 
     override fun getItemCount(): Int {
-        return restaurantList.size
+        return coffeeList.size
     }
 
     fun setLocationData(nearbyLocation: MutableList<ResultNearby>?) {
-        restaurantList = nearbyLocation!!
+        coffeeList = nearbyLocation!!
         notifyDataSetChanged()
     }
 
 
     //interface xu ly su kien onclick item
     interface OnMapItemClickListener {
-        fun onItemClick(restaurantList: ResultNearby, position: Int)
+        fun onItemClick(coffeeList: ResultNearby, position: Int)
     }
 
 //    private val onItemClickListener: ((MapLocation) -> Unit)? = null

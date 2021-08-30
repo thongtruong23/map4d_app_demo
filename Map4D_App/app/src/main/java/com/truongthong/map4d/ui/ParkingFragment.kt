@@ -13,9 +13,12 @@ import com.truongthong.map4d.R
 import com.truongthong.map4d.adapter.ParkingAdapter
 import com.truongthong.map4d.model.nearby.ResultNearby
 import com.truongthong.map4d.viewmodel.NearbyPlaceViewModel
-import kotlinx.android.synthetic.main.fragment_restaurant.*
+import kotlinx.android.synthetic.main.fragment_parking.*
 import kotlinx.android.synthetic.main.fragment_restaurant.btn_mode_2D
 import kotlinx.android.synthetic.main.fragment_restaurant.btn_mode_3D
+import kotlinx.android.synthetic.main.fragment_restaurant.rv_listNearby
+import kotlinx.android.synthetic.main.fragment_restaurant.search_bar_res
+import vn.map4d.map.annotations.MFMarker
 import vn.map4d.map.annotations.MFMarkerOptions
 import vn.map4d.map.camera.MFCameraUpdateFactory
 import vn.map4d.map.core.Map4D
@@ -27,18 +30,19 @@ class ParkingFragment : Fragment(), OnMapReadyCallback,
     ParkingAdapter.OnMapItemClickListener {
 
     private var map4D: Map4D? = null
+    private var currentMarker: MFMarker? = null
     private var nearbyAdapter = ParkingAdapter(arrayListOf(), this)
     private lateinit var nearbyPlaceViewModel: NearbyPlaceViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mapViewRestaurant.onCreate(savedInstanceState)
-        mapViewRestaurant.onResume()
+        mapViewParking.onCreate(savedInstanceState)
+        mapViewParking.onResume()
 
-        mapViewRestaurant.getMapAsync(this)
+        mapViewParking.getMapAsync(this)
 
-        mapViewRestaurant.visibility = View.INVISIBLE
+        mapViewParking.visibility = View.INVISIBLE
 
         setupRecyclerView()
 
@@ -63,14 +67,14 @@ class ParkingFragment : Fragment(), OnMapReadyCallback,
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-                mapViewRestaurant.visibility = View.INVISIBLE
+                mapViewParking.visibility = View.INVISIBLE
                 rv_listNearby.visibility = View.VISIBLE
 
                 if (query.toString().trim().isNotBlank() && query != null) {
                     nearbyPlaceViewModel.getNearby("16.0721,108.2243", 8000, query)
                 } else {
                     rv_listNearby.visibility = View.INVISIBLE
-                    mapViewRestaurant.visibility = View.INVISIBLE
+                    mapViewParking.visibility = View.INVISIBLE
                 }
                 return false
             }
@@ -113,25 +117,39 @@ class ParkingFragment : Fragment(), OnMapReadyCallback,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_restaurant, container, false)
+        val view = inflater.inflate(R.layout.fragment_parking, container, false)
 
         enterTransition = MaterialFadeThrough()
         return view
     }
 
-    override fun onItemClick(restaurantList: ResultNearby, position: Int) {
-        mapViewRestaurant.visibility = View.VISIBLE
-        val lat = restaurantList.location.lat
-        val lng = restaurantList.location.lng
+    override fun onItemClick(parkingList: ResultNearby, position: Int) {
+        mapViewParking.visibility = View.VISIBLE
 
-        val mLocation = MFLocationCoordinate(lat, lng)
+        if (currentMarker != null) {
+            currentMarker!!.remove()
 
-        map4D?.addMarker(
-            MFMarkerOptions().position(mLocation).title(restaurantList.name)
-                .snippet(restaurantList.address)
-        )
-//        map4D?.moveCamera(MFCameraUpdateFactory.newCoordinateZoom(mLocation,19.0))
-        map4D?.animateCamera(MFCameraUpdateFactory.newCoordinate(mLocation))
+            val newLat = parkingList.location.lat
+            val newLng = parkingList.location.lng
+            val mNewLocation = MFLocationCoordinate(newLat, newLng)
+
+            currentMarker = map4D?.addMarker(
+                MFMarkerOptions().position(mNewLocation).title(parkingList.name)
+                    .snippet(parkingList.address)
+            )
+            map4D?.animateCamera(MFCameraUpdateFactory.newCoordinate(mNewLocation))
+
+        } else {
+            val lat = parkingList.location.lat
+            val lng = parkingList.location.lng
+            val mLocation = MFLocationCoordinate(lat, lng)
+
+            currentMarker = map4D?.addMarker(
+                MFMarkerOptions().position(mLocation).title(parkingList.name)
+                    .snippet(parkingList.address)
+            )
+            map4D?.animateCamera(MFCameraUpdateFactory.newCoordinate(mLocation))
+        }
 
         rv_listNearby.visibility = View.INVISIBLE
 

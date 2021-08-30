@@ -12,7 +12,7 @@ import com.truongthong.map4d.model.nearby.ResultNearby
 import com.truongthong.map4d.ui.ParkingFragment
 
 class ParkingAdapter(
-    var restaurantList: MutableList<ResultNearby>,
+    var parkingList: MutableList<ResultNearby>,
     var clickListener: ParkingFragment
 ) :
     RecyclerView.Adapter<ParkingAdapter.ViewHolder>() {
@@ -48,23 +48,23 @@ class ParkingAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.initialaze(restaurantList.get(position), clickListener)
+        holder.initialaze(parkingList.get(position), clickListener)
 
     }
 
     override fun getItemCount(): Int {
-        return restaurantList.size
+        return parkingList.size
     }
 
     fun setLocationData(nearbyLocation: MutableList<ResultNearby>?) {
-        restaurantList = nearbyLocation!!
+        parkingList = nearbyLocation!!
         notifyDataSetChanged()
     }
 
 
     //interface xu ly su kien onclick item
     interface OnMapItemClickListener {
-        fun onItemClick(restaurantList: ResultNearby, position: Int)
+        fun onItemClick(parkingList: ResultNearby, position: Int)
     }
 
 //    private val onItemClickListener: ((MapLocation) -> Unit)? = null

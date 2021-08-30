@@ -12,7 +12,7 @@ import com.truongthong.map4d.model.nearby.ResultNearby
 import com.truongthong.map4d.ui.SchoolFragment
 
 class SchoolAdapter(
-    var restaurantList: MutableList<ResultNearby>,
+    var schoolList: MutableList<ResultNearby>,
     var clickListener: SchoolFragment
 ) :
     RecyclerView.Adapter<SchoolAdapter.ViewHolder>() {
@@ -48,23 +48,23 @@ class SchoolAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.initialaze(restaurantList.get(position), clickListener)
+        holder.initialaze(schoolList.get(position), clickListener)
 
     }
 
     override fun getItemCount(): Int {
-        return restaurantList.size
+        return schoolList.size
     }
 
     fun setLocationData(nearbyLocation: MutableList<ResultNearby>?) {
-        restaurantList = nearbyLocation!!
+        schoolList = nearbyLocation!!
         notifyDataSetChanged()
     }
 
 
     //interface xu ly su kien onclick item
     interface OnMapItemClickListener {
-        fun onItemClick(restaurantList: ResultNearby, position: Int)
+        fun onItemClick(schoolList: ResultNearby, position: Int)
     }
 
 //    private val onItemClickListener: ((MapLocation) -> Unit)? = null

@@ -122,7 +122,7 @@ class RouteLocationFragment : Fragment(), OnMapReadyCallback {
     @SuppressLint("SetTextI18n")
     private fun setTextDestination(newLatLng: MFLocationCoordinate) {
         btn_choose.setOnClickListener {
-            edt_destination.setText("${newLatLng.latitude},${newLatLng.longitude}").toString()
+            edt_destination.setText("${newLatLng.latitude},${newLatLng.longitude}").toString().trim()
                 .trim()
             btn_choose.visibility = View.INVISIBLE
             btn_done.visibility = View.VISIBLE
